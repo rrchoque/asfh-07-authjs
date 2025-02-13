@@ -10,11 +10,11 @@ import auth from "auth-astro";
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()],
-  },
-
   output: "server",
   adapter: netlify(),
   integrations: [db(), auth()],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
