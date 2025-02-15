@@ -9,7 +9,7 @@ export const getProductsByPage = defineAction({
     page: z.number().optional().default(1),
     limit: z.number().optional().default(12),
   }),
-  async handler({ page, limit }) {
+  handler: async ({ page, limit }) => {
     page = page <= 0 ? 1 : page;
 
     const [totalRecords] = await db.select({ count: count() }).from(Product);
