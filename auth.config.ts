@@ -1,3 +1,4 @@
+import type { AdapterUser } from "@auth/core/adapters";
 import Credentials from "@auth/core/providers/credentials";
 import GitHub from "@auth/core/providers/github";
 import { db, eq, User } from "astro:db";
@@ -31,4 +32,19 @@ export default defineConfig({
       },
     }),
   ],
+
+  callbacks: {
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    session: ({ session, user, token }) => {
+      console.log({ sessionUser: user, tokenUser: token.user });
+
+      session.user = token.user as AdapterUser;
+      return session;
+    },
+  },
 });
