@@ -39,12 +39,12 @@ const { isLoggedIn, isAdmin } = Astro.locals;
 </nav>
 
 <script>
-  const { signOut } = await import('auth-astro/client');
+  const { signOut } = await import("auth-astro/client");
 
-  const logoutElem = document.querySelector('#logout') as HTMLLIElement;
+  const logoutElem = document.querySelector("#logout") as HTMLLIElement;
 
-  logoutElem?.addEventListener('click', async () => {
+  logoutElem?.addEventListener("click", async () => {
     await signOut();
-    window.location.href = '/';
+    window.location.href = "/";
   });
 </script>
