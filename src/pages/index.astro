@@ -1,5 +1,6 @@
 ---
 import { ProductList } from "@/components";
+import Pagination from "@/components/shared/Pagination.astro";
 import MainLayout from "@/layouts/MainLayout.astro";
 import { actions } from "astro:actions";
 
@@ -11,5 +12,6 @@ const { products, totalPages } = data!;
 <MainLayout>
   <h1 class="text-3xl">Listado de productos</h1>
 
-  <ProductList products={products} />
+  <ProductList products={products} client:idle />
+  <Pagination totalPages={totalPages} />
 </MainLayout>
