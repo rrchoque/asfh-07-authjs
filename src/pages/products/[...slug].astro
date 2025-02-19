@@ -55,6 +55,53 @@ const { product, images } = data;
   <input type="hidden" id="product-id" value={product.id} />
 </MainLayout>
 
+<script>
+  const sizeElements = document.querySelectorAll("li");
+  sizeElements.forEach((sizeElement) => {
+    sizeElement.addEventListener("click", () => {
+      sizeElements.forEach((element) =>
+        element.classList.remove("selected-size")
+      );
+      sizeElement.classList.add("selected-size");
+    });
+  });
+
+  const quantityInput = document.querySelector("input") as HTMLInputElement;
+  const productIdInput = document.querySelector(
+    "#product-id"
+  ) as HTMLInputElement;
+
+  let quantity = 1;
+
+  const [decrementButton, incrementButton, addToCardButton] =
+    document.querySelectorAll("button");
+
+  incrementButton.addEventListener("click", () => {
+    quantity = Math.min(quantity + 1, 5);
+    quantityInput.value = quantity.toString();
+  });
+
+  decrementButton.addEventListener("click", () => {
+    quantity = Math.max(quantity - 1, 1);
+    quantityInput.value = quantity.toString();
+  });
+
+  addToCardButton.addEventListener("click", () => {
+    const size = document.querySelector(".selected-size")?.textContent;
+    if (!size) {
+      return alert("Seleccione una talla");
+    }
+
+    addToCardButton.disabled = true;
+
+    console.log({
+      id: productIdInput.value,
+      size: size,
+      quantity: quantity,
+    });
+  });
+</script>
+
 <style>
   @reference "tailwindcss";
   h3 {
