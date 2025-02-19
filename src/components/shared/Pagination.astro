@@ -17,10 +17,7 @@ const path = url.pathname;
 ---
 
 <div class="flex justify-between my-32">
-  <a
-    href={`${path}?page=${Math.max(currentPage - 1, 1)}`}
-    class="button p-2 bg-blue-500 text-white rounded"
-  >
+  <a href={`${path}?page=${Math.max(currentPage - 1, 1)}`} class="button">
     Anteriores
   </a>
 
@@ -28,14 +25,15 @@ const path = url.pathname;
 
   <a
     href={`${path}?page=${Math.min(currentPage + 1, totalPages)}`}
-    class="button p-2 bg-blue-500 text-white rounded"
+    class="button"
   >
     Siguientes
   </a>
 </div>
 
 <style>
+  @reference "tailwindcss";
   .button {
-    /* @apply p-2 bg-blue-500 text-white rounded; */
+    @apply p-2 bg-blue-500 hover:bg-blue-600 text-white rounded;
   }
 </style>
