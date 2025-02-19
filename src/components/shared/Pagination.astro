@@ -1,6 +1,4 @@
 ---
-import "../../styles/pagination.css";
-
 interface Props {
   totalPages: number;
 }
@@ -21,8 +19,7 @@ const path = url.pathname;
 <div class="flex justify-between my-32">
   <a
     href={`${path}?page=${Math.max(currentPage - 1, 1)}`}
-    class="button"
-    href=""
+    class="button p-2 bg-blue-500 text-white rounded"
   >
     Anteriores
   </a>
@@ -31,9 +28,14 @@ const path = url.pathname;
 
   <a
     href={`${path}?page=${Math.min(currentPage + 1, totalPages)}`}
-    class="button"
-    href=""
+    class="button p-2 bg-blue-500 text-white rounded"
   >
     Siguientes
   </a>
 </div>
+
+<style>
+  .button {
+    /* @apply p-2 bg-blue-500 text-white rounded; */
+  }
+</style>

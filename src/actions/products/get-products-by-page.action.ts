@@ -34,8 +34,6 @@ export const getProductsByPage = defineAction({
 
     const { rows } = await db.run(productsQuery);
 
-    console.log(rows);
-
     // const products = await db
     //   .select()
     //   .from(Product)
