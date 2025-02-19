@@ -16,8 +16,6 @@ const { products, totalPages } = data!;
 
 <MainLayout>
   <h1 class="text-3xl">Listado de productos</h1>
-
   <ProductList products={products} client:idle />
-
   <Pagination totalPages={totalPages} />
 </MainLayout>
