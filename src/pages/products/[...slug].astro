@@ -57,6 +57,7 @@ const { product, images } = data;
 </MainLayout>
 
 <script>
+  import { itemsInCart } from "@/store";
   import { CartCookiesClient } from "@/utils";
 
   const sizeElements = document.querySelectorAll("li");
@@ -95,7 +96,7 @@ const { product, images } = data;
       return alert("Seleccione una talla");
     }
 
-    addToCardButton.disabled = true;
+    //addToCardButton.disabled = true;
 
     const cart = CartCookiesClient.addItem({
       productId: productIdInput.value,
@@ -103,7 +104,9 @@ const { product, images } = data;
       quantity: quantity,
     });
 
-    window.location.href = "/cart";
+    itemsInCart.set(cart.length);
+
+    //window.location.href = "/cart";
   });
 </script>
 
