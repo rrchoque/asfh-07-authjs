@@ -57,6 +57,8 @@ const { product, images } = data;
 </MainLayout>
 
 <script>
+  import { CartCookiesClient } from "@/utils";
+
   const sizeElements = document.querySelectorAll("li");
   sizeElements.forEach((sizeElement) => {
     sizeElement.addEventListener("click", () => {
@@ -95,11 +97,13 @@ const { product, images } = data;
 
     addToCardButton.disabled = true;
 
-    console.log({
-      id: productIdInput.value,
+    const cart = CartCookiesClient.addItem({
+      productId: productIdInput.value,
       size: size,
       quantity: quantity,
     });
+
+    window.location.href = "/cart";
   });
 </script>
 
