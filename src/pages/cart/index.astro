@@ -50,7 +50,7 @@ console.log({ products });
               <button
                 data-id={product.productId}
                 data-size={product.size}
-                class="text-blue-500 btn-delete"
+                class="text-blue-500 hover:text-blue-600 btn-delete"
               >
                 Remover
               </button>
@@ -91,3 +91,22 @@ console.log({ products });
     </div>
   </section>
 </MainLayout>
+
+<script>
+  import { CartCookiesClient } from "@/utils";
+
+  const deleteButtons: NodeListOf<HTMLButtonElement> =
+    document.querySelectorAll(".btn-delete");
+
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const target = event.target as HTMLButtonElement;
+      const productId = target.dataset.id ?? "";
+      const size = target.dataset.size ?? "";
+
+      const cart = CartCookiesClient.removeItem(productId, size);
+
+      window.location.reload();
+    });
+  });
+</script>
