@@ -23,6 +23,7 @@ const { product, images } = data;
   <a href="javascript:history.back()" class="text-blue-500">← Volver</a>
 
   <form class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <input type="hidden" name="id" value={product.id} />
     <!-- Datos generales -->
     <div class="mt-2">
       <h2 class="text-lg font-semibold">Datos generales</h2>
@@ -152,7 +153,16 @@ const { product, images } = data;
         <div class="flex">
           {
             ["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
-              <button class="btn-size">{size}</button>
+              <button
+                type="button"
+                class="btn-size"
+                onclick="this.classList.toggle('active')"
+                class:list={
+                  product.sizes.split(",").includes(size) ? "active" : ""
+                }
+              >
+                {size}
+              </button>
             ))
           }
         </div>
@@ -265,3 +275,36 @@ const { product, images } = data;
     }
   </style>
 </MainLayout>
+
+<script>
+  import { actions } from "astro:actions";
+  import { navigate } from "astro:transitions/client";
+
+  document.addEventListener("astro:page-load", () => {
+    const form = document.querySelector("form") as HTMLFormElement;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const sizeButtons = document.querySelectorAll(".btn-size");
+
+      const selectedSizes = Array.from(sizeButtons)
+        .filter((btn) => btn.classList.contains("active"))
+        .map((btn) => btn.textContent?.trim())
+        .join(",");
+
+      formData.set("sizes", selectedSizes);
+
+      // const formValues = Object.fromEntries(formData.entries());
+      // console.log(formValues);
+
+      const { data, error } = await actions.createUpdateProduct(formData);
+
+      if (error) {
+        return alert(error.message);
+      }
+
+      navigate(`/admin/products/${data.slug}`);
+    });
+  });
+</script>
