@@ -1,3 +1,4 @@
+import { ImageUpload } from "@/utils/image-upload";
 import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
 import { db, eq, Product, ProductImage } from "astro:db";
@@ -60,13 +61,39 @@ export const createUpdateProduct = defineAction({
       ...rest,
     };
 
-    console.log({ product });
+    //console.log({ product });
+    const queries: any = [];
 
     if (!form.id) {
-      await db.insert(Product).values(product);
+      queries.push(db.insert(Product).values(product));
     } else {
-      await db.update(Product).set(product).where(eq(Product.id, id));
+      queries.push(db.update(Product).set(product).where(eq(Product.id, id)));
     }
+
+    // Imágenes
+    const secureUrls: string[] = [];
+    if (
+      form.imageFiles &&
+      form.imageFiles.length > 0 &&
+      form.imageFiles[0].size > 0
+    ) {
+      const urls = await Promise.all(
+        form.imageFiles.map((file) => ImageUpload.upload(file))
+      );
+
+      secureUrls.push(...urls);
+    }
+
+    secureUrls.forEach((imageUrl) => {
+      const imageObj = {
+        id: UUID(),
+        image: imageUrl,
+        productId: product.id,
+      };
+      queries.push(db.insert(ProductImage).values(imageObj));
+    });
+
+    await db.batch(queries);
 
     return product;
   },
