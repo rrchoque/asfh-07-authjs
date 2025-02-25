@@ -206,12 +206,13 @@ const { product, images } = data;
             </h2>
           </div>
           <div class="grid gap-2">
-            <p
+            <label
               id="lbl-selected-files"
               class="text-center text-gray-900 text-sm font-medium leading-snug"
+              for="file-upload"
             >
-              Arrastre y suelte su archivo aquí o
-            </p>
+              Arrastre y suelte su archivo aquí o haga click aquí
+            </label>
             <div class="flex items-center justify-center">
               <label>
                 <input
@@ -223,7 +224,7 @@ const { product, images } = data;
                   hidden
                 />
                 <div
-                  class="flex w-40 h-9 px-2 flex-col bg-indigo-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
+                  class="hidden flex w-40 h-9 px-2 flex-col bg-indigo-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
                 >
                   Seleccione archivos
                 </div>
@@ -352,7 +353,7 @@ const { product, images } = data;
 
     const lblSelectedFiles = document.querySelector(
       "#lbl-selected-files"
-    ) as HTMLParagraphElement;
+    ) as HTMLLabelElement;
     const dropZone = document.querySelector("#drop-zone") as HTMLDivElement;
     const fileInput = document.querySelector(
       "#file-upload"
@@ -384,6 +385,33 @@ const { product, images } = data;
 
     (["dragleave", "drop"] as const).forEach((eventName) => {
       dropZone.addEventListener(eventName, unHighlight);
+    });
+
+    // Sólo imágenes
+    const createFileList = (files: File[]): FileList => {
+      const dataTrasfer = new DataTransfer();
+      files.forEach((file) => dataTrasfer.items.add(file));
+      return dataTrasfer.files;
+    };
+
+    const handleFiles = (files: FileList) => {
+      const validFiles = Array.from(files).filter((file) =>
+        file.type.startsWith("image/")
+      );
+
+      if (fileInput && validFiles.length > 0) {
+        fileInput.files = createFileList(validFiles);
+      }
+
+      lblSelectedFiles.innerHTML = `<strong>${validFiles.length} archivos seleccionados</strong>`;
+    };
+
+    dropZone.addEventListener("drop", (e) => {
+      const files = e.dataTransfer?.files;
+
+      if (files) {
+        handleFiles(files);
+      }
     });
 
     // fin del astro:load
