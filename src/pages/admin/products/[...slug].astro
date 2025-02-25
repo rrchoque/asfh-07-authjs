@@ -182,6 +182,7 @@ const { product, images } = data;
 
         <!-- File input -->
         <div
+          id="drop-zone"
           class="w-full py-9 bg-gray-50 hover:bg-gray-100 rounded-2xl border border-gray-300 gap-3 grid border-dashed"
         >
           <div class="grid gap-1">
@@ -205,11 +206,12 @@ const { product, images } = data;
             </h2>
           </div>
           <div class="grid gap-2">
-            <h4
+            <p
+              id="lbl-selected-files"
               class="text-center text-gray-900 text-sm font-medium leading-snug"
             >
               Arrastre y suelte su archivo aquí o
-            </h4>
+            </p>
             <div class="flex items-center justify-center">
               <label>
                 <input
@@ -345,5 +347,52 @@ const { product, images } = data;
         // navigate()
       });
     });
+
+    // Drag & Drop
+
+    const lblSelectedFiles = document.querySelector(
+      "#lbl-selected-files"
+    ) as HTMLParagraphElement;
+    const dropZone = document.querySelector("#drop-zone") as HTMLDivElement;
+    const fileInput = document.querySelector(
+      "#file-upload"
+    ) as HTMLInputElement;
+
+    const preventDefaults = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    (["dragenter", "dragover", "dragleave", "drop"] as const).forEach(
+      (eventName) => {
+        dropZone.addEventListener(eventName, preventDefaults);
+        document.body.addEventListener(eventName, preventDefaults);
+      }
+    );
+
+    const highlight = (e: DragEvent) => {
+      dropZone.classList.add("file-selected");
+    };
+
+    (["dragenter", "dragover"] as const).forEach((eventName) => {
+      dropZone.addEventListener(eventName, highlight);
+    });
+
+    const unHighlight = (e: DragEvent) => {
+      dropZone.classList.remove("file-selected");
+    };
+
+    (["dragleave", "drop"] as const).forEach((eventName) => {
+      dropZone.addEventListener(eventName, unHighlight);
+    });
+
+    // fin del astro:load
   });
 </script>
+
+<style>
+  @reference "tailwindcss";
+  #drop-zone.file-selected {
+    @apply border-blue-500 bg-blue-50;
+  }
+</style>
